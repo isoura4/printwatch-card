@@ -17,23 +17,29 @@ const MOONRAKER_PRINTING_STATES = ['printing'];
 const MOONRAKER_PAUSED_STATES = ['paused'];
 const MOONRAKER_IDLE_STATES = ['standby', 'complete', 'cancelled', 'error'];
 
+// Combined states for all integrations
+const ALL_PRINTING_STATES = [...PRINTING_STATES, ...MOONRAKER_PRINTING_STATES, ...MOONRAKER_PAUSED_STATES];
+const ALL_IDLE_STATES = [...NON_PRINTING_STATES, ...MOONRAKER_IDLE_STATES];
+
 export const isPrinting = (hass, config) => {
   const currentStage = hass.states[config.current_stage_entity]?.state;
   const printStatus = hass.states[config.print_status_entity]?.state;
   
-  // Check Bambu Lab states
-  if (PRINTING_STATES.includes(printStatus)) return true;
+  // Early return if no valid states
+  if (!printStatus && !currentStage) return false;
   
-  // Check Moonraker states - Current Print State entity
-  if (MOONRAKER_PRINTING_STATES.includes(printStatus)) return true;
-  if (MOONRAKER_PAUSED_STATES.includes(printStatus)) return true;
+  // Check print status first (works for both Bambu Lab and Moonraker)
+  if (ALL_PRINTING_STATES.includes(printStatus)) return true;
+  if (ALL_IDLE_STATES.includes(printStatus)) return false;
   
-  if (NON_PRINTING_STATES.includes(currentStage)) return false;
-  if (MOONRAKER_IDLE_STATES.includes(printStatus)) return false;
+  // Bambu Lab specific: Check current stage if available
+  if (currentStage) {
+    if (NON_PRINTING_STATES.includes(currentStage)) return false;
+    if (currentStage === 'printing' || currentStage.startsWith('paused_')) return true;
+    if (PRINTING_PROCESS_STATES.includes(currentStage)) return true;
+  }
   
-  if (currentStage === 'printing' || currentStage?.startsWith('paused_')) return true;
-  
-  return PRINTING_PROCESS_STATES.includes(currentStage);
+  return false;
 };
 
 export const isPaused = (hass, config) => {
@@ -121,22 +127,25 @@ const getLastPrintName = (hass, config) => {
 export const getEntityStates = (hass, config) => {
   const getState = (entity, defaultValue = '0') => 
     hass.states[entity]?.state || defaultValue;
-
-  // Check if print weight/length entities are configured and have valid values
-  const printWeightValue = config.print_weight_entity ? parseInt(getState(config.print_weight_entity)) : undefined;
-  const printLengthValue = config.print_length_entity ? parseInt(getState(config.print_length_entity)) : undefined;
+  
+  // Helper function for parsing numeric values, returns undefined for invalid inputs
+  const parseNumericValue = (entity, parser = parseInt) => {
+    if (!entity) return undefined;
+    const value = parser(getState(entity));
+    return isNaN(value) ? undefined : value;
+  };
 
   return {
     name: config.printer_name || 'Unnamed Printer',
     status: getState(config.print_status_entity, 'idle'),
     currentStage: getState(config.current_stage_entity, 'unknown'),
     taskName: getState(config.task_name_entity, 'No active print'),
-    progress: parseFloat(getState(config.progress_entity)),
-    currentLayer: parseInt(getState(config.current_layer_entity)),
-    totalLayers: parseInt(getState(config.total_layers_entity)),
-    remainingTime: parseInt(getState(config.remaining_time_entity)),
-    bedTemp: parseFloat(getState(config.bed_temp_entity)),
-    nozzleTemp: parseFloat(getState(config.nozzle_temp_entity)),
+    progress: parseNumericValue(config.progress_entity, parseFloat) || 0,
+    currentLayer: parseNumericValue(config.current_layer_entity) || 0,
+    totalLayers: parseNumericValue(config.total_layers_entity) || 0,
+    remainingTime: parseNumericValue(config.remaining_time_entity) || 0,
+    bedTemp: parseNumericValue(config.bed_temp_entity, parseFloat) || 0,
+    nozzleTemp: parseNumericValue(config.nozzle_temp_entity, parseFloat) || 0,
     speedProfile: getState(config.speed_profile_entity, 'standard'),
     isPrinting: isPrinting(hass, config),
     isPaused: isPaused(hass, config),
@@ -154,7 +163,7 @@ export const getEntityStates = (hass, config) => {
     // Print weight/length - pass through entity IDs and values
     print_weight_entity_id: config.print_weight_entity,
     print_length_entity_id: config.print_length_entity,
-    print_weight_entity: printWeightValue,
-    print_length_entity: printLengthValue
+    print_weight_entity: parseNumericValue(config.print_weight_entity),
+    print_length_entity: parseNumericValue(config.print_length_entity)
   };
 };

@@ -46,7 +46,7 @@ export const printStatusTemplate = (entities, config) => {
           <div class="print-stats">
             ${hasPrintLength ? html`
               ${localize.t('print.length')}: ${entities.print_length_entity} 
-              ${config.hass.states[entities.print_length_entity_id]?.attributes?.unit_of_measurement || ''} |
+              ${config.hass.states[entities.print_length_entity_id]?.attributes?.unit_of_measurement || ''}${hasPrintWeight ? ' | ' : ''}
             ` : ''}
             ${hasPrintWeight ? html`
               ${localize.t('print.weight')}: ${entities.print_weight_entity} 

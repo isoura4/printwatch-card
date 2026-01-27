@@ -47,4 +47,5 @@ export const headerTemplate = (entities, controls) => {
       ` : ''}
     </div>
   </div>
-`;};
+`;
+};

@@ -183,8 +183,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- [Greg Hesp](https://github.com/greghesp/ha-bambulab) maker of [ha-bambulab](https://github.com/greghesp/ha-bambulab) - Bambu Lab integration
-- [Marco-Olivier Arsenault](https://github.com/marcolivierarsenault/moonraker-home-assistant) maker of [moonraker-home-assistant](https://github.com/marcolivierarsenault/moonraker-home-assistant) - Moonraker/Klipper integration
+- [Greg Hesp](https://github.com/greghesp/ha-bambulab), creator of [ha-bambulab](https://github.com/greghesp/ha-bambulab) - Bambu Lab integration
+- [Marco-Olivier Arsenault](https://github.com/marcolivierarsenault/moonraker-home-assistant), creator of [moonraker-home-assistant](https://github.com/marcolivierarsenault/moonraker-home-assistant) - Moonraker/Klipper integration
 - Thanks to all 3D printer enthusiasts who provided feedback and testing
 - Inspired by the great Home Assistant community
 
