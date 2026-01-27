@@ -14,7 +14,8 @@ export const cardTemplate = (context) => {
     hass, 
     amsSlots, 
     _toggleLight, 
-    _toggleFan, 
+    _toggleFan,
+    _togglePrinterSwitch,
     _cameraError, 
     isOnline,
     formatters,
@@ -30,9 +31,11 @@ export const cardTemplate = (context) => {
   const controls = {
     lightState: hass.states[entities.chamber_light_entity]?.state,
     fanState: hass.states[entities.aux_fan_entity]?.state,
+    printerSwitchState: hass.states[entities.printer_switch_entity]?.state,
     hasFan: !!entities.aux_fan_entity,
     onLightToggle: _toggleLight,
     onFanToggle: _toggleFan,
+    onPrinterSwitchToggle: _togglePrinterSwitch,
     hass
   };
 

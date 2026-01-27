@@ -40,7 +40,15 @@ export const DEFAULT_CONFIG = {
   online_entity: '',
   // Print info entities
   print_weight_entity: '',
-  print_length_entity: ''
+  print_length_entity: '',
+  // Printer power switch (Moonraker/Klipper)
+  printer_switch_entity: '',
+  // Speed/Fan controls (Moonraker/Klipper - number entities)
+  speed_factor_entity: '',
+  fan_speed_entity: '',
+  // Sensor entities (Moonraker/Klipper)
+  runout_sensor_entity: '',
+  update_available_entity: ''
 };
 
 /**

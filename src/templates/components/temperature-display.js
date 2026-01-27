@@ -39,6 +39,26 @@ export const temperatureDisplayTemplate = (entities, hass, dialogConfig = {}, se
           title: localize.t('temperatures.speed_profile')
         };
         break;
+      case 'speed_factor':
+        config = {
+          ...config,
+          title: localize.t('temperatures.speed_factor'),
+          min: hass.states[entityId]?.attributes?.min || 0,
+          max: hass.states[entityId]?.attributes?.max || 200,
+          step: hass.states[entityId]?.attributes?.step || 1,
+          unit: hass.states[entityId]?.attributes?.unit_of_measurement || '%'
+        };
+        break;
+      case 'fan_speed':
+        config = {
+          ...config,
+          title: localize.t('temperatures.fan_speed'),
+          min: hass.states[entityId]?.attributes?.min || 0,
+          max: hass.states[entityId]?.attributes?.max || 100,
+          step: hass.states[entityId]?.attributes?.step || 1,
+          unit: hass.states[entityId]?.attributes?.unit_of_measurement || '%'
+        };
+        break;
     }
 
     setDialogConfig(config);
@@ -48,9 +68,22 @@ export const temperatureDisplayTemplate = (entities, hass, dialogConfig = {}, se
   const bedTempUnit = hass.states[entities.bed_temp_entity]?.attributes?.unit_of_measurement || '°C';
   const nozzleTempUnit = hass.states[entities.nozzle_temp_entity]?.attributes?.unit_of_measurement || '°C';
 
-  // Check if speed profile entity is configured and exists
+  // Check if speed profile entity is configured and exists (Bambu Lab)
   const hasSpeedProfile = entities.speed_profile_entity && 
     hass.states[entities.speed_profile_entity];
+
+  // Check if speed factor entity is configured and exists (Moonraker/Klipper)
+  const hasSpeedFactor = entities.speed_factor_entity && 
+    hass.states[entities.speed_factor_entity];
+
+  // Check if fan speed entity is configured and exists (Moonraker/Klipper)
+  const hasFanSpeed = entities.fan_speed_entity && 
+    hass.states[entities.fan_speed_entity];
+
+  // Get speed factor unit
+  const speedFactorUnit = hass.states[entities.speed_factor_entity]?.attributes?.unit_of_measurement || '%';
+  // Get fan speed unit
+  const fanSpeedUnit = hass.states[entities.fan_speed_entity]?.attributes?.unit_of_measurement || '%';
 
   return html`
     <div class="temperatures">
@@ -84,6 +117,30 @@ export const temperatureDisplayTemplate = (entities, hass, dialogConfig = {}, se
               (hass.states[entities.speed_profile_entity]?.state || 'standard').slice(1)}
           </div>
           <div>${localize.t('temperatures.speed')}</div>
+        </div>
+      ` : ''}
+
+      ${hasSpeedFactor ? html`
+        <div 
+          class="temp-item"
+          @click=${() => handleControlClick('speed_factor', entities.speedFactor, entities.speed_factor_entity)}
+        >
+          <div class="temp-value">
+            ${entities.speedFactor !== undefined ? `${Math.round(entities.speedFactor)}${speedFactorUnit}` : '-'}
+          </div>
+          <div>${localize.t('temperatures.speed_factor')}</div>
+        </div>
+      ` : ''}
+
+      ${hasFanSpeed ? html`
+        <div 
+          class="temp-item"
+          @click=${() => handleControlClick('fan_speed', entities.fanSpeed, entities.fan_speed_entity)}
+        >
+          <div class="temp-value">
+            ${entities.fanSpeed !== undefined ? `${Math.round(entities.fanSpeed)}${fanSpeedUnit}` : '-'}
+          </div>
+          <div>${localize.t('temperatures.fan_speed')}</div>
         </div>
       ` : ''}
     </div>
