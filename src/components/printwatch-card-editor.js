@@ -198,7 +198,8 @@ class PrintWatchCardEditor extends LitElement {
     const configKey = target.configKey;
     // ha-selector components fire value-changed with ev.detail.value
     // ha-textfield uses ev.target.value via input event
-    const value = ev.detail !== undefined ? ev.detail.value : target.value;
+    // Note: DOM input events have ev.detail as null, so we need to check for both null and undefined
+    const value = ev.detail?.value !== undefined ? ev.detail.value : target.value;
 
     if (this._config[configKey] === value) {
       return;
