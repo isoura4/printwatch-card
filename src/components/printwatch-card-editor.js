@@ -117,7 +117,7 @@ class PrintWatchCardEditor extends LitElement {
   }
 
   _renderEntityPicker(configKey, label, domain = null) {
-    const selector = domain 
+    const entitySelector = domain 
       ? { entity: { domain } }
       : { entity: {} };
     
@@ -126,7 +126,7 @@ class PrintWatchCardEditor extends LitElement {
         <ha-selector
           .hass=${this.hass}
           .label=${label}
-          .selector=${selector}
+          .selector=${entitySelector}
           .value=${this._config[configKey] || ''}
           .configKey=${configKey}
           @value-changed=${this._valueChanged}

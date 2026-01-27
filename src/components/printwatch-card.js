@@ -224,23 +224,9 @@ class PrintWatchCard extends LitElement {
    */
   static getStubConfig() {
     return {
+      ...DEFAULT_CONFIG,
       printer_name: 'My 3D Printer',
-      camera_refresh_rate: 1000,
-      print_status_entity: '',
-      task_name_entity: '',
-      progress_entity: '',
-      current_layer_entity: '',
-      total_layers_entity: '',
-      remaining_time_entity: '',
-      bed_temp_entity: '',
-      nozzle_temp_entity: '',
-      bed_target_temp_entity: '',
-      nozzle_target_temp_entity: '',
-      camera_entity: '',
-      cover_image_entity: '',
-      pause_button_entity: '',
-      resume_button_entity: '',
-      stop_button_entity: ''
+      camera_refresh_rate: DEFAULT_CAMERA_REFRESH_RATE
     };
   }
 }
