@@ -209,6 +209,40 @@ class PrintWatchCard extends LitElement {
   getCardSize() {
     return 6;
   }
+
+  /**
+   * Returns the custom element used for editing the card configuration
+   * This enables the visual editor in Home Assistant
+   */
+  static getConfigElement() {
+    return document.createElement('printwatch-card-editor');
+  }
+
+  /**
+   * Returns a stub configuration for the card
+   * This is used when the card is first added via the UI
+   */
+  static getStubConfig() {
+    return {
+      printer_name: 'My 3D Printer',
+      camera_refresh_rate: 1000,
+      print_status_entity: '',
+      task_name_entity: '',
+      progress_entity: '',
+      current_layer_entity: '',
+      total_layers_entity: '',
+      remaining_time_entity: '',
+      bed_temp_entity: '',
+      nozzle_temp_entity: '',
+      bed_target_temp_entity: '',
+      nozzle_target_temp_entity: '',
+      camera_entity: '',
+      cover_image_entity: '',
+      pause_button_entity: '',
+      resume_button_entity: '',
+      stop_button_entity: ''
+    };
+  }
 }
 
 customElements.define('printwatch-card', PrintWatchCard);
