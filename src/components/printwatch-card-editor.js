@@ -276,14 +276,22 @@ class PrintWatchCardEditor extends LitElement {
       }
     }
     
-    this._amsSlotCount = Math.max(1, this._amsSlotCount - 1);
+    this._amsSlotCount = Math.max(4, this._amsSlotCount - 1);
     this._fireConfigChanged(newConfig);
   }
 
   _renderEntityPicker(configKey, label, domain = null, optional = false) {
-    const entitySelector = domain 
-      ? { entity: { domain } }
-      : { entity: {} };
+    // Support both single domain string and array of domains
+    let entitySelector;
+    if (domain) {
+      if (Array.isArray(domain)) {
+        entitySelector = { entity: { domain: domain } };
+      } else {
+        entitySelector = { entity: { domain: domain } };
+      }
+    } else {
+      entitySelector = { entity: {} };
+    }
     
     const hasValue = this._config[configKey] && this._config[configKey].trim() !== '';
     
