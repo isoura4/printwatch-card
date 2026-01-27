@@ -2,7 +2,11 @@ import { html } from 'lit';
 import { localize } from '../../utils/localize';
 import { formatDuration } from '../../utils/formatters';
 
-export const headerTemplate = (entities, controls) => html`
+export const headerTemplate = (entities, controls) => {
+  // Check if chamber light entity is configured and exists
+  const hasLight = entities.chamber_light_entity && controls.lightState !== undefined;
+  
+  return html`
   <div class="header">
     <div>
       <div class="printer-name">${entities.name}</div>
@@ -25,12 +29,14 @@ export const headerTemplate = (entities, controls) => html`
       ` : ''}
     </div>
     <div class="header-controls">
-      <button 
-        class="icon-button ${controls.lightState === 'on' ? 'active' : ''}" 
-        @click=${controls.onLightToggle}
-      >
-        <ha-icon icon="mdi:lightbulb"></ha-icon>
-      </button>
+      ${hasLight ? html`
+        <button 
+          class="icon-button ${controls.lightState === 'on' ? 'active' : ''}" 
+          @click=${controls.onLightToggle}
+        >
+          <ha-icon icon="mdi:lightbulb"></ha-icon>
+        </button>
+      ` : ''}
       ${entities.aux_fan_entity ? html`
         <button 
           class="icon-button ${controls.fanState === 'on' ? 'active' : ''}"
@@ -41,4 +47,4 @@ export const headerTemplate = (entities, controls) => html`
       ` : ''}
     </div>
   </div>
-`;
+`;};

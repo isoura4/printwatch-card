@@ -1,3 +1,4 @@
+// Bambu Lab specific states
 const PRINTING_STATES = ['printing', 'running', 'pause'];
 const NON_PRINTING_STATES = ['idle', 'offline', 'unknown'];
 const PRINTING_PROCESS_STATES = [
@@ -11,19 +12,35 @@ const PRINTING_PROCESS_STATES = [
   'calibrating_extrusion_flow'
 ];
 
+// Moonraker specific states
+const MOONRAKER_PRINTING_STATES = ['printing'];
+const MOONRAKER_PAUSED_STATES = ['paused'];
+const MOONRAKER_IDLE_STATES = ['standby', 'complete', 'cancelled', 'error'];
+
 export const isPrinting = (hass, config) => {
   const currentStage = hass.states[config.current_stage_entity]?.state;
   const printStatus = hass.states[config.print_status_entity]?.state;
   
+  // Check Bambu Lab states
   if (PRINTING_STATES.includes(printStatus)) return true;
+  
+  // Check Moonraker states - Current Print State entity
+  if (MOONRAKER_PRINTING_STATES.includes(printStatus)) return true;
+  if (MOONRAKER_PAUSED_STATES.includes(printStatus)) return true;
+  
   if (NON_PRINTING_STATES.includes(currentStage)) return false;
-  if (currentStage === 'printing' || currentStage.startsWith('paused_')) return true;
+  if (MOONRAKER_IDLE_STATES.includes(printStatus)) return false;
+  
+  if (currentStage === 'printing' || currentStage?.startsWith('paused_')) return true;
   
   return PRINTING_PROCESS_STATES.includes(currentStage);
 };
 
-export const isPaused = (hass, config) => 
-  hass.states[config.print_status_entity]?.state === 'pause';
+export const isPaused = (hass, config) => {
+  const printStatus = hass.states[config.print_status_entity]?.state;
+  // Bambu Lab uses 'pause', Moonraker uses 'paused'
+  return printStatus === 'pause' || printStatus === 'paused';
+};
 
 export const getAmsSlots = (hass, config) => {
   // First, check for explicit external spool configuration
@@ -91,9 +108,12 @@ const getLastPrintName = (hass, config) => {
   const printStatus = hass.states[config.print_status_entity]?.state;
   const taskName = hass.states[config.task_name_entity]?.state;
   
-  return ['idle', 'finish'].includes(printStatus) && 
+  // Bambu Lab uses 'idle', 'finish'; Moonraker uses 'standby', 'complete'
+  const idleStates = ['idle', 'finish', 'standby', 'complete'];
+  
+  return idleStates.includes(printStatus) && 
          taskName && 
-         !['unavailable', 'unknown'].includes(taskName) 
+         !['unavailable', 'unknown', ''].includes(taskName) 
     ? taskName 
     : null;
 };
@@ -101,6 +121,10 @@ const getLastPrintName = (hass, config) => {
 export const getEntityStates = (hass, config) => {
   const getState = (entity, defaultValue = '0') => 
     hass.states[entity]?.state || defaultValue;
+
+  // Check if print weight/length entities are configured and have valid values
+  const printWeightValue = config.print_weight_entity ? parseInt(getState(config.print_weight_entity)) : undefined;
+  const printLengthValue = config.print_length_entity ? parseInt(getState(config.print_length_entity)) : undefined;
 
   return {
     name: config.printer_name || 'Unnamed Printer',
@@ -127,7 +151,10 @@ export const getEntityStates = (hass, config) => {
     aux_fan_entity: config.aux_fan_entity && hass.states[config.aux_fan_entity] ? config.aux_fan_entity : null,
     camera_entity: config.camera_entity,
     cover_image_entity: config.cover_image_entity,
-    print_weight_entity: parseInt(getState(config.print_weight_entity)),
-    print_length_entity: parseInt(getState(config.print_length_entity))
+    // Print weight/length - pass through entity IDs and values
+    print_weight_entity_id: config.print_weight_entity,
+    print_length_entity_id: config.print_length_entity,
+    print_weight_entity: printWeightValue,
+    print_length_entity: printLengthValue
   };
 };

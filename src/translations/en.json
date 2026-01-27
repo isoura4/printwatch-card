@@ -5,11 +5,15 @@
         "idle": "Idle",
         "printing": "Printing",
         "paused": "Paused",
+        "pause": "Paused",
         "complete": "Complete",
         "offline": "Offline",
         "unknown": "Unknown",
         "running": "Running",
-        "finish": "Finished"
+        "finish": "Finished",
+        "standby": "Standby",
+        "cancelled": "Cancelled",
+        "error": "Error"
       }
     }
   },

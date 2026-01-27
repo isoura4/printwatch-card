@@ -5,10 +5,15 @@
         "idle": "Bereit",
         "printing": "Druckt",
         "paused": "Pausiert",
+        "pause": "Pausiert",
         "complete": "Fertig",
         "offline": "Offline",
         "unknown": "Unbekannt",
-        "running": "Läuft"
+        "running": "Läuft",
+        "finish": "Fertig",
+        "standby": "Bereitschaft",
+        "cancelled": "Abgebrochen",
+        "error": "Fehler"
       }
     }
   },
