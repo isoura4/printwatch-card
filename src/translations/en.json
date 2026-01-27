@@ -43,14 +43,22 @@
           "bed_target": "Set Bed Temperature",
           "nozzle_target": "Set Nozzle Temperature",
           "speed_profile": "Set Print Speed",
-          "range": "Range: {min}°C - {max}°C"
+          "speed_factor": "Speed Factor",
+          "fan_speed": "Fan Speed",
+          "range": "Range: {min}°C - {max}°C",
+          "range_with_unit": "Range: {min} - {max}{unit}"
         },
         "controls": {
           "pause": "Pause",
           "resume": "Resume",
           "stop": "Stop",
           "cancel": "Cancel",
-          "save": "Save"
+          "save": "Save",
+          "printer_power": "Printer Power"
+        },
+        "indicators": {
+          "update_available": "Firmware update available",
+          "runout_detected": "Filament runout detected"
         },
         "speed_profiles": {
           "silent": "Silent",

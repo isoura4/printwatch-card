@@ -67,6 +67,24 @@ export const cardStyles = css`
     font-size: 24px;
     font-weight: 500;
     color: var(--primary-text-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .update-indicator {
+    color: var(--warning-color, #ff9800);
+    --mdc-icon-size: 20px;
+  }
+
+  .runout-warning {
+    color: var(--error-color, #f44336);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .runout-warning ha-icon {
+    --mdc-icon-size: 18px;
   }
 
   .status {

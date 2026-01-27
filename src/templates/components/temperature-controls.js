@@ -38,10 +38,10 @@ export const temperatureDialogTemplate = (dialogConfig, hass) => {
         entity_id: dialogConfig.entityId,
         value: value
       }).then(() => {
-        console.log('Temperature updated successfully');
+        console.log('Value updated successfully');
         dialogConfig.onClose();
       }).catch(err => {
-        console.error('Error updating temperature:', err);
+        console.error('Error updating value:', err);
       });
     }
   };
@@ -75,6 +75,30 @@ export const temperatureDialogTemplate = (dialogConfig, hass) => {
       `;
     }
 
+    // Speed factor and fan speed controls (Moonraker/Klipper number entities)
+    if (dialogConfig.type === 'speed_factor' || dialogConfig.type === 'fan_speed') {
+      const unit = dialogConfig.unit || '%';
+      const step = dialogConfig.step || 1;
+      return html`
+        <ha-textfield
+          label=${dialogConfig.title}
+          .value=${dialogConfig.currentValue}
+          type="number"
+          min=${dialogConfig.min}
+          max=${dialogConfig.max}
+          step=${step}
+          class="temp-input"
+          suffix="${unit}"
+          autoValidate
+          required
+        ></ha-textfield>
+        <div class="range-limits">
+          ${localize.t('temperatures.range_with_unit', { min: dialogConfig.min, max: dialogConfig.max, unit })}
+        </div>
+      `;
+    }
+
+    // Temperature controls (bed and nozzle)
     return html`
       <ha-textfield
         label=${localize.t(`temperatures.${dialogConfig.type}_target`)}

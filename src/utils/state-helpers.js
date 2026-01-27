@@ -164,6 +164,19 @@ export const getEntityStates = (hass, config) => {
     print_weight_entity_id: config.print_weight_entity,
     print_length_entity_id: config.print_length_entity,
     print_weight_entity: parseNumericValue(config.print_weight_entity),
-    print_length_entity: parseNumericValue(config.print_length_entity)
+    print_length_entity: parseNumericValue(config.print_length_entity),
+    // Printer power switch (Moonraker/Klipper)
+    printer_switch_entity: config.printer_switch_entity && hass.states[config.printer_switch_entity] ? config.printer_switch_entity : null,
+    printerSwitchState: config.printer_switch_entity ? hass.states[config.printer_switch_entity]?.state : null,
+    // Speed/Fan controls (Moonraker/Klipper - number entities)
+    speed_factor_entity: config.speed_factor_entity && hass.states[config.speed_factor_entity] ? config.speed_factor_entity : null,
+    speedFactor: parseNumericValue(config.speed_factor_entity, parseFloat),
+    fan_speed_entity: config.fan_speed_entity && hass.states[config.fan_speed_entity] ? config.fan_speed_entity : null,
+    fanSpeed: parseNumericValue(config.fan_speed_entity, parseFloat),
+    // Sensor entities (Moonraker/Klipper)
+    runout_sensor_entity: config.runout_sensor_entity && hass.states[config.runout_sensor_entity] ? config.runout_sensor_entity : null,
+    runoutSensorState: config.runout_sensor_entity ? hass.states[config.runout_sensor_entity]?.state : null,
+    update_available_entity: config.update_available_entity && hass.states[config.update_available_entity] ? config.update_available_entity : null,
+    updateAvailableState: config.update_available_entity ? hass.states[config.update_available_entity]?.state : null
   };
 };

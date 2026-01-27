@@ -39,13 +39,32 @@
         "temperatures": {
           "bed": "Bett",
           "nozzle": "Düse",
-          "speed": "Geschwindigkeit"
+          "speed": "Geschwindigkeit",
+          "bed_target": "Betttemperatur einstellen",
+          "nozzle_target": "Düsentemperatur einstellen",
+          "speed_profile": "Druckgeschwindigkeit einstellen",
+          "speed_factor": "Geschwindigkeitsfaktor",
+          "fan_speed": "Lüftergeschwindigkeit",
+          "range": "Bereich: {min}°C - {max}°C",
+          "range_with_unit": "Bereich: {min} - {max}{unit}"
         },
         "controls": {
           "pause": "Pause",
           "resume": "Fortsetzen",
           "stop": "Stopp",
-          "cancel": "Abbrechen"
+          "cancel": "Abbrechen",
+          "save": "Speichern",
+          "printer_power": "Drucker Ein/Aus"
+        },
+        "indicators": {
+          "update_available": "Firmware-Update verfügbar",
+          "runout_detected": "Filament-Runout erkannt"
+        },
+        "speed_profiles": {
+          "silent": "Leise",
+          "standard": "Standard",
+          "sport": "Sport",
+          "ludicrous": "Ludicrous"
         },
         "dialogs": {
           "pause": {

@@ -116,13 +116,21 @@ total_layers_entity: sensor.<printer>_total_layer
 remaining_time_entity: sensor.<printer>_print_time_left
 bed_temp_entity: sensor.<printer>_bed_temperature
 nozzle_temp_entity: sensor.<printer>_extruder_temperature
-bed_target_temp_entity: sensor.<printer>_bed_target
-nozzle_target_temp_entity: sensor.<printer>_extruder_target
+bed_target_temp_entity: number.<printer>_bed_target
+nozzle_target_temp_entity: number.<printer>_extruder_target
 camera_entity: camera.<printer>_webcam
 cover_image_entity: camera.<printer>_thumbnail
 pause_button_entity: button.<printer>_pause_print
 resume_button_entity: button.<printer>_resume_print
 stop_button_entity: button.<printer>_cancel_print
+# Optional: Printer power control
+# printer_switch_entity: switch.<printer>_printer
+# Optional: Speed and fan control (number entities)
+# speed_factor_entity: number.<printer>_speed_factor
+# fan_speed_entity: number.<printer>_fan_speed
+# Optional: Sensors
+# runout_sensor_entity: binary_sensor.<printer>_runoutsensor
+# update_available_entity: binary_sensor.<printer>_update_available
 # Optional: LED light control (if configured in Klipper)
 # chamber_light_entity: light.<printer>_neopixel_strip
 ```
@@ -131,8 +139,10 @@ stop_button_entity: button.<printer>_cancel_print
 
 **Moonraker-specific notes:**
 - AMS slots are not available (Bambu Lab specific feature)
-- Speed profile control is not available via Moonraker
-- Some features like print weight/length may not be available depending on your slicer configuration
+- Speed profile (select entity) is Bambu Lab specific; use `speed_factor_entity` for Moonraker/Klipper
+- Printer power switch allows turning the printer on/off
+- Filament runout sensor shows a warning indicator when triggered
+- Update available indicator shows when firmware updates are available
 
 
 ## Troubleshooting

@@ -97,6 +97,16 @@ class PrintWatchCard extends LitElement {
     });
   }
 
+  _togglePrinterSwitch() {
+    const switchEntity = this.hass.states[this.config.printer_switch_entity];
+    if (!switchEntity) return;
+
+    const service = switchEntity.state === 'on' ? 'turn_off' : 'turn_on';
+    this.hass.callService('switch', service, {
+      entity_id: this.config.printer_switch_entity,
+    });
+  }
+
   updated(changedProps) {
     super.updated(changedProps);
     if (changedProps.has('hass')) {
@@ -193,6 +203,7 @@ class PrintWatchCard extends LitElement {
       formatters: this.formatters,
       _toggleLight: () => this._toggleLight(),
       _toggleFan: () => this._toggleFan(),
+      _togglePrinterSwitch: () => this._togglePrinterSwitch(),
       _cameraError: this._cameraError,
       isOnline: this.isOnline(),
       handleImageError: () => this.handleImageError(),

@@ -209,11 +209,19 @@ class PrintWatchCardEditor extends LitElement {
         <!-- Optional Entities -->
         <div class="section-title">Optional (Bambu Lab / Advanced)</div>
         ${this._renderEntityPicker('online_entity', 'Online Status', 'binary_sensor')}
-        ${this._renderEntityPicker('speed_profile_entity', 'Speed Profile', 'sensor')}
+        ${this._renderEntityPicker('speed_profile_entity', 'Speed Profile (Bambu Lab)', 'select')}
         ${this._renderEntityPicker('chamber_light_entity', 'Chamber Light', 'light')}
         ${this._renderEntityPicker('aux_fan_entity', 'Aux Fan', 'fan')}
         ${this._renderEntityPicker('print_weight_entity', 'Print Weight', 'sensor')}
         ${this._renderEntityPicker('print_length_entity', 'Print Length', 'sensor')}
+
+        <!-- Moonraker/Klipper Entities -->
+        <div class="section-title">Moonraker/Klipper Controls</div>
+        ${this._renderEntityPicker('printer_switch_entity', 'Printer Power Switch', 'switch')}
+        ${this._renderEntityPicker('speed_factor_entity', 'Speed Factor', 'number')}
+        ${this._renderEntityPicker('fan_speed_entity', 'Fan Speed', 'number')}
+        ${this._renderEntityPicker('runout_sensor_entity', 'Filament Runout Sensor', 'binary_sensor')}
+        ${this._renderEntityPicker('update_available_entity', 'Firmware Update Available', 'binary_sensor')}
 
         <!-- AMS Slots (Bambu Lab specific) -->
         <div class="section-title">AMS Slots (Bambu Lab)</div>
