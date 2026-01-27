@@ -21,6 +21,17 @@ if (!customElements.get('printwatch-card-editor')) {
   customElements.define('printwatch-card-editor', PrintWatchCardEditor);
 }
 
+// Register card with Home Assistant's card picker
+// This makes the card findable when searching for cards in the dashboard
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: 'printwatch-card',
+  name: 'PrintWatch Card',
+  description: 'A card for monitoring 3D printers (Bambu Lab, Moonraker/Klipper)',
+  preview: true,
+  documentationURL: 'https://github.com/isoura4/printwatch-card'
+});
+
 // Export for potential reuse
 export { 
   PrintWatchCard,

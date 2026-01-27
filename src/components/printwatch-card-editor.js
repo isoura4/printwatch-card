@@ -196,7 +196,9 @@ class PrintWatchCardEditor extends LitElement {
 
     const target = ev.target;
     const configKey = target.configKey;
-    const value = target.value;
+    // ha-selector components fire value-changed with ev.detail.value
+    // ha-textfield uses ev.target.value via input event
+    const value = ev.detail !== undefined ? ev.detail.value : target.value;
 
     if (this._config[configKey] === value) {
       return;
@@ -209,6 +211,8 @@ class PrintWatchCardEditor extends LitElement {
       newConfig[configKey] = value;
     }
 
+    // Update internal config state to reflect changes in UI
+    this._config = newConfig;
     this._fireConfigChanged(newConfig);
   }
 
@@ -220,6 +224,8 @@ class PrintWatchCardEditor extends LitElement {
     const newConfig = { ...this._config };
     delete newConfig[configKey];
 
+    // Update internal config state to reflect changes in UI
+    this._config = newConfig;
     this._fireConfigChanged(newConfig);
   }
 
@@ -252,6 +258,8 @@ class PrintWatchCardEditor extends LitElement {
       newConfig[configKey] = value;
     }
 
+    // Update internal config state to reflect changes in UI
+    this._config = newConfig;
     this._fireConfigChanged(newConfig);
   }
 
@@ -277,6 +285,8 @@ class PrintWatchCardEditor extends LitElement {
     }
     
     this._amsSlotCount = Math.max(4, this._amsSlotCount - 1);
+    // Update internal config state to reflect changes in UI
+    this._config = newConfig;
     this._fireConfigChanged(newConfig);
   }
 
