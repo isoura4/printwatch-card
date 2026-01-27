@@ -361,6 +361,45 @@ class PrintWatchCardEditor extends LitElement {
     `;
   }
 
+  _renderSelectField(configKey, label, options) {
+    return html`
+      <div class="form-row">
+        <ha-selector
+          .hass=${this.hass}
+          .label=${label}
+          .selector=${{ select: { options: options, mode: 'dropdown' } }}
+          .value=${this._config[configKey] !== undefined ? String(this._config[configKey]) : options[0].value}
+          .configKey=${configKey}
+          @value-changed=${this._selectValueChanged}
+        ></ha-selector>
+      </div>
+    `;
+  }
+
+  _selectValueChanged(ev) {
+    if (!this._config || !this.hass) {
+      return;
+    }
+
+    const target = ev.target;
+    const configKey = target.configKey;
+    const value = ev.detail?.value;
+
+    // Convert to number if the value is numeric
+    const numValue = parseInt(value, 10);
+    const finalValue = isNaN(numValue) ? value : numValue;
+
+    if (this._config[configKey] === finalValue) {
+      return;
+    }
+
+    const newConfig = { ...this._config };
+    newConfig[configKey] = finalValue;
+
+    this._config = newConfig;
+    this._fireConfigChanged(newConfig);
+  }
+
   _renderSection(id, title, content, badge = null) {
     const isExpanded = this._expandedSections[id];
     return html`
@@ -459,6 +498,12 @@ class PrintWatchCardEditor extends LitElement {
         ${this._renderSection('camera', 'Camera & Images', html`
           ${this._renderEntityPicker('camera_entity', 'Camera', ['camera', 'image'])}
           ${this._renderEntityPicker('cover_image_entity', 'Cover/Thumbnail Image', ['camera', 'image'], true)}
+          ${this._renderSelectField('camera_rotation', 'Camera Rotation', [
+            { value: '0', label: '0°' },
+            { value: '90', label: '90°' },
+            { value: '180', label: '180°' },
+            { value: '270', label: '270°' }
+          ])}
         `)}
 
         <!-- Control Button Entities -->

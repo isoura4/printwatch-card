@@ -23,7 +23,8 @@ export const cardTemplate = (context) => {
     confirmDialog,
     setDialogConfig,
     handlePauseDialog,
-    handleStopDialog
+    handleStopDialog,
+    cameraRotation
   } = context;
 
   if (!entities || !hass) return html``;
@@ -45,7 +46,8 @@ export const cardTemplate = (context) => {
     currentStage: entities.currentStage,
     entityPicture: hass.states[entities.camera_entity]?.attributes?.entity_picture,
     onError: context.handleImageError,
-    onLoad: context.handleImageLoad
+    onLoad: context.handleImageLoad,
+    rotation: cameraRotation
   };
 
   return html`

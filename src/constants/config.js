@@ -48,7 +48,9 @@ export const DEFAULT_CONFIG = {
   fan_speed_entity: '',
   // Sensor entities (Moonraker/Klipper)
   runout_sensor_entity: '',
-  update_available_entity: ''
+  update_available_entity: '',
+  // Camera rotation (0, 90, 180, 270 degrees)
+  camera_rotation: 0
 };
 
 /**

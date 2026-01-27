@@ -73,6 +73,7 @@ Add the card to your dashboard with the configuration for your printer integrati
 type: custom:printwatch-card
 printer_name: P1S
 camera_refresh_rate: 1000  # Refresh rate in milliseconds (1 second)
+camera_rotation: 0  # Rotate camera feed (0, 90, 180, or 270 degrees)
 print_status_entity: sensor.p1s_print_status
 current_stage_entity: sensor.p1s_current_stage
 task_name_entity: sensor.p1s_task_name
@@ -108,6 +109,7 @@ Replace `<printer>` with your printer's name as configured in the Moonraker inte
 type: custom:printwatch-card
 printer_name: Voron
 camera_refresh_rate: 1000  # Refresh rate in milliseconds (1 second)
+camera_rotation: 0  # Rotate camera feed (0, 90, 180, or 270 degrees)
 print_status_entity: sensor.<printer>_current_print_state
 task_name_entity: sensor.<printer>_filename
 progress_entity: sensor.<printer>_progress
