@@ -38,10 +38,10 @@ export const temperatureDialogTemplate = (dialogConfig, hass) => {
         entity_id: dialogConfig.entityId,
         value: value
       }).then(() => {
-        console.log('Value updated successfully');
+        console.log(`${dialogConfig.type} updated successfully to ${value}`);
         dialogConfig.onClose();
       }).catch(err => {
-        console.error('Error updating value:', err);
+        console.error(`Error updating ${dialogConfig.type}:`, err);
       });
     }
   };
