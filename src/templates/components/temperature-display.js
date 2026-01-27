@@ -5,6 +5,9 @@ import { temperatureDialogTemplate } from './temperature-controls';
 
 export const temperatureDisplayTemplate = (entities, hass, dialogConfig = {}, setDialogConfig) => {
   const handleControlClick = (type, currentValue, entityId) => {
+    // Don't open dialog if entity is not configured
+    if (!entityId) return;
+    
     let config = {
       open: true,
       type,
@@ -45,6 +48,10 @@ export const temperatureDisplayTemplate = (entities, hass, dialogConfig = {}, se
   const bedTempUnit = hass.states[entities.bed_temp_entity]?.attributes?.unit_of_measurement || '°C';
   const nozzleTempUnit = hass.states[entities.nozzle_temp_entity]?.attributes?.unit_of_measurement || '°C';
 
+  // Check if speed profile entity is configured and exists
+  const hasSpeedProfile = entities.speed_profile_entity && 
+    hass.states[entities.speed_profile_entity];
+
   return html`
     <div class="temperatures">
       <div 
@@ -67,16 +74,18 @@ export const temperatureDisplayTemplate = (entities, hass, dialogConfig = {}, se
         <div>${localize.t('temperatures.nozzle')}</div>
       </div>
 
-      <div 
-        class="temp-item"
-        @click=${() => handleControlClick('speed', hass.states[entities.speed_profile_entity]?.state || 'standard', entities.speed_profile_entity)}
-      >
-        <div class="temp-value">
-          ${(hass.states[entities.speed_profile_entity]?.state || 'standard').charAt(0).toUpperCase() + 
-            (hass.states[entities.speed_profile_entity]?.state || 'standard').slice(1)}
+      ${hasSpeedProfile ? html`
+        <div 
+          class="temp-item"
+          @click=${() => handleControlClick('speed', hass.states[entities.speed_profile_entity]?.state || 'standard', entities.speed_profile_entity)}
+        >
+          <div class="temp-value">
+            ${(hass.states[entities.speed_profile_entity]?.state || 'standard').charAt(0).toUpperCase() + 
+              (hass.states[entities.speed_profile_entity]?.state || 'standard').slice(1)}
+          </div>
+          <div>${localize.t('temperatures.speed')}</div>
         </div>
-        <div>${localize.t('temperatures.speed')}</div>
-      </div>
+      ` : ''}
     </div>
 
     ${temperatureDialogTemplate(dialogConfig, hass)}

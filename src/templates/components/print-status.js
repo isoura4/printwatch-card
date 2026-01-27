@@ -21,6 +21,14 @@ export const printStatusTemplate = (entities, config) => {
   const hasCoverImage = entities.cover_image_entity && 
     config.hass.states[entities.cover_image_entity]?.attributes?.entity_picture;
 
+  // Check if print length/weight entities are configured and have valid values
+  const hasPrintLength = entities.print_length_entity_id && 
+    entities.print_length_entity !== undefined && 
+    !isNaN(entities.print_length_entity);
+  const hasPrintWeight = entities.print_weight_entity_id && 
+    entities.print_weight_entity !== undefined && 
+    !isNaN(entities.print_weight_entity);
+
   return html`
     <div class="print-status">
       <div class="print-preview">
@@ -36,13 +44,13 @@ export const printStatusTemplate = (entities, config) => {
         <div class="print-details">
           <h3>${entities.taskName}</h3>
           <div class="print-stats">
-            ${entities.print_length_entity !== undefined ? html`
+            ${hasPrintLength ? html`
               ${localize.t('print.length')}: ${entities.print_length_entity} 
-              ${config.hass.states['sensor.p1s_print_length']?.attributes?.unit_of_measurement || ''} |
+              ${config.hass.states[entities.print_length_entity_id]?.attributes?.unit_of_measurement || ''}${hasPrintWeight ? ' | ' : ''}
             ` : ''}
-            ${entities.print_weight_entity !== undefined ? html`
+            ${hasPrintWeight ? html`
               ${localize.t('print.weight')}: ${entities.print_weight_entity} 
-              ${config.hass.states['sensor.p1s_print_weight']?.attributes?.unit_of_measurement || ''}
+              ${config.hass.states[entities.print_weight_entity_id]?.attributes?.unit_of_measurement || ''}
             ` : ''}
           </div>
 

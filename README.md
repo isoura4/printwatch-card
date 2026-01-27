@@ -1,6 +1,10 @@
 # PrintWatch Card
 
-A feature-rich Home Assistant card for monitoring and controlling your P1S 3D printer. Get real-time updates on print progress, temperatures, material status, and more with a sleek, user-friendly interface.
+A feature-rich Home Assistant card for monitoring and controlling your 3D printer. Get real-time updates on print progress, temperatures, material status, and more with a sleek, user-friendly interface.
+
+**Supported Integrations:**
+- [Bambu Lab (ha-bambulab)](https://github.com/greghesp/ha-bambulab) - P1S, X1C, and other Bambu Lab printers
+- [Moonraker Home Assistant](https://github.com/marcolivierarsenault/moonraker-home-assistant) - Klipper/Moonraker-based printers (Voron, Ender, etc.)
 
 ### Light Mode 
 ![PrintWatch Card Screenshot](assets/light-mode-min.png)
@@ -15,23 +19,24 @@ A feature-rich Home Assistant card for monitoring and controlling your P1S 3D pr
 
 - 🎥 Live camera feed with configurable refresh rate
 - 📊 Print progress tracking with layer count and estimated completion time
-- 🎨 AMS/Material status visualization including current filament
+- 🎨 AMS/Material status visualization including current filament (Bambu Lab only)
 - 💡 Quick controls for chamber light and auxiliary fan
 - ⏯️ Print control buttons (pause/resume/stop) with [confirmation dialogs](assets/pause.png)
-- 🎛️ Speed profile monitoring and control
+- 🎛️ Speed profile monitoring and control (Bambu Lab only)
 - ⚡ Local API (LAN Mode)
 - 🌑 Native Theme support
 - 🌡️ Real-time temperature monitoring and control for bed and nozzle
-- 📷 G-Code preview image (requires HA Bambu Lab plugin update)
+- 📷 G-Code preview image / Thumbnail
 - 🏷️ Display print weight and length details
--🌍 Localization support (initial translations in German, more contributions welcome!)
-pa
+- 🌍 Localization support (initial translations in German, more contributions welcome!)
+
 ## Prerequisites
 
 - Home Assistant
-- P1S Printer integration configured in Home Assistant using [ha-bambulab]((https://github.com/greghesp/ha-bambulab)) plugin
+- One of the following integrations:
+  - **Bambu Lab**: [ha-bambulab](https://github.com/greghesp/ha-bambulab) plugin with image sensor toggle turned on
+  - **Moonraker/Klipper**: [moonraker-home-assistant](https://github.com/marcolivierarsenault/moonraker-home-assistant) integration
 - Required entities set up (see Configuration section)
-- Image sensor toggle turned on
 
 ![Image Screenshot](assets/image-toggle.png)
 
@@ -60,12 +65,9 @@ pa
 
 ## Configuration
 
-Add the card to your dashboard with this basic configuration:
+Add the card to your dashboard with the configuration for your printer integration:
 
-
-## Configuration
-
-Add the card to your dashboard with this basic configuration:
+### Bambu Lab Configuration (ha-bambulab)
 
 ```yaml
 type: custom:printwatch-card
@@ -87,8 +89,6 @@ ams_slot1_entity: sensor.p1s_ams_tray_1
 ams_slot2_entity: sensor.p1s_ams_tray_2
 ams_slot3_entity: sensor.p1s_ams_tray_3
 ams_slot4_entity: sensor.p1s_ams_tray_4
-ams_slot5_entity: sensor.p1s_ams_tray_5
-...
 camera_entity: image.p1s_camera
 cover_image_entity: image.p1s_cover_image
 pause_button_entity: button.p1s_pause_printing
@@ -99,6 +99,40 @@ aux_fan_entity: fan.p1s_aux_fan
 print_weight_entity: sensor.p1s_print_weight
 print_length_entity: sensor.p1s_print_length
 ```
+
+### Moonraker/Klipper Configuration (moonraker-home-assistant)
+
+Replace `<printer>` with your printer's name as configured in the Moonraker integration (e.g., `voron`, `ender3`).
+
+```yaml
+type: custom:printwatch-card
+printer_name: Voron
+camera_refresh_rate: 1000  # Refresh rate in milliseconds (1 second)
+print_status_entity: sensor.<printer>_current_print_state
+task_name_entity: sensor.<printer>_filename
+progress_entity: sensor.<printer>_progress
+current_layer_entity: sensor.<printer>_current_layer
+total_layers_entity: sensor.<printer>_total_layer
+remaining_time_entity: sensor.<printer>_print_time_left
+bed_temp_entity: sensor.<printer>_bed_temperature
+nozzle_temp_entity: sensor.<printer>_extruder_temperature
+bed_target_temp_entity: sensor.<printer>_bed_target
+nozzle_target_temp_entity: sensor.<printer>_extruder_target
+camera_entity: camera.<printer>_webcam
+cover_image_entity: camera.<printer>_thumbnail
+pause_button_entity: button.<printer>_pause_print
+resume_button_entity: button.<printer>_resume_print
+stop_button_entity: button.<printer>_cancel_print
+# Optional: LED light control (if configured in Klipper)
+# chamber_light_entity: light.<printer>_neopixel_strip
+```
+
+**Note:** Entity names may vary depending on your Moonraker/Klipper configuration. Use Home Assistant's Developer Tools to find the correct entity names for your setup.
+
+**Moonraker-specific notes:**
+- AMS slots are not available (Bambu Lab specific feature)
+- Speed profile control is not available via Moonraker
+- Some features like print weight/length may not be available depending on your slicer configuration
 
 
 ## Troubleshooting
@@ -121,10 +155,15 @@ print_length_entity: sensor.p1s_print_length
    - Check that button entities are available and not in an error state
 
 4. **G-Code preview not appearing**
-   - Ensure you have the latest version of the HA Bambu Lab plugin
-   - Enable G-Code preview in the plugin settings
+   - For Bambu Lab: Ensure you have the latest version of the HA Bambu Lab plugin and enable G-Code preview in the plugin settings
+   - For Moonraker: Make sure your slicer is configured to generate thumbnails and they are properly served by Moonraker
+
 5. **Localization issues**
    - Some translations are AI-generated; if you notice errors, consider submitting improvements!
+
+6. **Moonraker: Printer always shows offline**
+   - The card doesn't require an `online_entity` for Moonraker. If your print status entity exists and has a valid state, the printer is considered online.
+   - Check that your `print_status_entity` is correctly configured and returning valid states like "standby", "printing", "paused", etc.
 
 
 ## Contributing
@@ -144,8 +183,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- [Greg Hesp](https://github.com/greghesp/ha-bambulab) maker of [ha-bambulab]((https://github.com/greghesp/ha-bambulab)) without this plugin wouldn't work
-- Thanks to all P1S users who provided feedback and testing
+- [Greg Hesp](https://github.com/greghesp/ha-bambulab), creator of [ha-bambulab](https://github.com/greghesp/ha-bambulab) - Bambu Lab integration
+- [Marco-Olivier Arsenault](https://github.com/marcolivierarsenault/moonraker-home-assistant), creator of [moonraker-home-assistant](https://github.com/marcolivierarsenault/moonraker-home-assistant) - Moonraker/Klipper integration
+- Thanks to all 3D printer enthusiasts who provided feedback and testing
 - Inspired by the great Home Assistant community
 
 ---

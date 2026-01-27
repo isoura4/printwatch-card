@@ -46,6 +46,15 @@ class PrintWatchCard extends LitElement {
   }
 
   isOnline() {
+    // If no online_entity is configured, assume the printer is online
+    // This is needed for Moonraker integration which doesn't have an online entity by default
+    if (!this.config.online_entity) {
+      // Check if we have any valid printer state entity as a fallback
+      const printStatusEntity = this.hass?.states[this.config.print_status_entity];
+      // If the print status entity exists and is not 'unavailable', consider the printer online
+      return printStatusEntity?.state && printStatusEntity.state !== 'unavailable';
+    }
+    
     const onlineEntity = this.hass?.states[this.config.online_entity];
     return onlineEntity?.state === 'on';
   }
