@@ -225,6 +225,7 @@ class PrintWatchCard extends LitElement {
       setDialogConfig,
       handlePauseDialog: () => this.handlePauseDialog(),
       handleStopDialog: () => this.handleStopDialog(),
+      cameraRotation: this.config.camera_rotation || 0,
     });
   }
 
