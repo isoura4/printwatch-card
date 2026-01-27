@@ -38,25 +38,37 @@ class PrintWatchCard extends LitElement {
   }
 
   setConfig(config) {
-    if (!config.printer_name) {
-      throw new Error('Please define printer_name');
+    // Use default printer name if not provided or empty
+    const finalConfig = { ...DEFAULT_CONFIG, ...config };
+    if (!finalConfig.printer_name || finalConfig.printer_name.trim() === '') {
+      finalConfig.printer_name = DEFAULT_CONFIG.printer_name;
     }
-    this.config = { ...DEFAULT_CONFIG, ...config };
+    this.config = finalConfig;
     this._cameraUpdateInterval = config.camera_refresh_rate || DEFAULT_CAMERA_REFRESH_RATE;
   }
 
   isOnline() {
-    // If no online_entity is configured, assume the printer is online
-    // This is needed for Moonraker integration which doesn't have an online entity by default
-    if (!this.config.online_entity) {
-      // Check if we have any valid printer state entity as a fallback
-      const printStatusEntity = this.hass?.states[this.config.print_status_entity];
-      // If the print status entity exists and is not 'unavailable', consider the printer online
-      return printStatusEntity?.state && printStatusEntity.state !== 'unavailable';
+    // If online_entity is configured, use it as the primary check
+    if (this.config.online_entity) {
+      const onlineEntity = this.hass?.states[this.config.online_entity];
+      return onlineEntity?.state === 'on';
     }
     
-    const onlineEntity = this.hass?.states[this.config.online_entity];
-    return onlineEntity?.state === 'on';
+    // For setups without online_entity (like Moonraker):
+    // 1. Check if camera entity exists and has a valid picture
+    const cameraEntity = this.hass?.states[this.config.camera_entity];
+    if (cameraEntity?.attributes?.entity_picture && cameraEntity.state !== 'unavailable') {
+      return true;
+    }
+    
+    // 2. Check if print status entity exists and is not 'unavailable'
+    const printStatusEntity = this.hass?.states[this.config.print_status_entity];
+    if (printStatusEntity?.state && printStatusEntity.state !== 'unavailable') {
+      return true;
+    }
+    
+    // 3. Assume offline if configured entities don't indicate an online state
+    return false;
   }
 
   shouldUpdateCamera() {
