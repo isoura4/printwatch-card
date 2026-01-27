@@ -67,7 +67,7 @@ class PrintWatchCard extends LitElement {
       return true;
     }
     
-    // 3. If no entities are configured at all, assume offline
+    // 3. Assume offline if configured entities don't indicate an online state
     return false;
   }
 
