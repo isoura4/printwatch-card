@@ -1,0 +1,92 @@
+{
+  "entity": {
+    "sensor": {
+      "state": {
+        "idle": "Inactif",
+        "ready": "Prêt",
+        "printing": "Impression",
+        "paused": "En pause",
+        "pause": "En pause",
+        "complete": "Terminé",
+        "offline": "Hors ligne",
+        "unknown": "Inconnu",
+        "running": "En cours",
+        "finish": "Terminé",
+        "standby": "En veille",
+        "cancelled": "Annulé",
+        "error": "Erreur"
+      }
+    }
+  },
+  "ui": {
+    "card": {
+      "printwatch": {
+        "not_printing": "Aucune impression en cours",
+        "last_print": "Dernière impression : {name}",
+        "printer_offline": "Imprimante hors ligne",
+        "camera_unavailable": "Caméra non disponible",
+        "time": {
+          "complete": "Terminé",
+          "left": "Restant",
+          "days": "j",
+          "hours": "h",
+          "minutes": "min",
+          "seconds": "s"
+        },
+        "print": {
+          "layer": "Couche",
+          "progress": "Progression",
+          "weight": "Poids",
+          "length": "Longueur"
+        },
+        "temperatures": {
+          "bed": "Plateau",
+          "nozzle": "Buse",
+          "speed": "Vitesse",
+          "bed_target": "Régler la température du plateau",
+          "nozzle_target": "Régler la température de la buse",
+          "speed_profile": "Régler la vitesse d'impression",
+          "speed_factor": "Facteur de vitesse",
+          "fan_speed": "Vitesse du ventilateur",
+          "range": "Plage : {min}°C - {max}°C",
+          "range_with_unit": "Plage : {min} - {max}{unit}"
+        },
+        "controls": {
+          "pause": "Pause",
+          "resume": "Reprendre",
+          "stop": "Arrêter",
+          "cancel": "Annuler",
+          "save": "Enregistrer",
+          "printer_power": "Alimentation imprimante"
+        },
+        "indicators": {
+          "update_available": "Mise à jour du firmware disponible",
+          "runout_detected": "Fin de filament détectée"
+        },
+        "speed_profiles": {
+          "silent": "Silencieux",
+          "standard": "Standard",
+          "sport": "Sport",
+          "ludicrous": "Ludicrous"
+        },
+        "dialogs": {
+          "pause": {
+            "title": "Confirmer la pause",
+            "message": "Êtes-vous sûr de vouloir mettre en pause l'impression en cours ? Cela peut affecter la qualité d'impression.",
+            "confirm": "Confirmer"
+          },
+          "stop": {
+            "title": "Confirmer l'arrêt",
+            "message": "Êtes-vous sûr de vouloir arrêter l'impression en cours ? Cette action est irréversible.",
+            "confirm": "Arrêter l'impression"
+          }
+        },
+        "materials": {
+          "empty": "Vide",
+          "unknown": "Inconnu",
+          "external_spool": "Bobine externe"
+        }
+      }
+    }
+  }
+}

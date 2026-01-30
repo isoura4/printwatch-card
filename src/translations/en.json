@@ -3,6 +3,7 @@
     "sensor": {
       "state": {
         "idle": "Idle",
+        "ready": "Ready",
         "printing": "Printing",
         "paused": "Paused",
         "pause": "Paused",
@@ -27,8 +28,10 @@
         "time": {
           "complete": "Complete",
           "left": "Left",
+          "days": "d",
           "hours": "h",
-          "minutes": "m"
+          "minutes": "m",
+          "seconds": "s"
         },
         "print": {
           "layer": "Layer",

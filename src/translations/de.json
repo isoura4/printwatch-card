@@ -3,6 +3,7 @@
     "sensor": {
       "state": {
         "idle": "Bereit",
+        "ready": "Bereit",
         "printing": "Druckt",
         "paused": "Pausiert",
         "pause": "Pausiert",
@@ -27,8 +28,10 @@
         "time": {
           "complete": "Fertig",
           "left": "Verbleibend",
+          "days": "T",
           "hours": "Std",
-          "minutes": "Min"
+          "minutes": "Min",
+          "seconds": "Sek"
         },
         "print": {
           "layer": "Schicht",

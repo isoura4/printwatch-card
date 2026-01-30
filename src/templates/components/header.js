@@ -31,7 +31,7 @@ export const headerTemplate = (entities, controls) => {
             ${localize.t('print.layer')}: ${entities.currentLayer}/${entities.totalLayers}
           </span>
         ` : ''}
-        ${entities.runout_sensor_entity && entities.runoutSensorState === 'on' ? html`
+        ${entities.runout_sensor_entity && entities.runoutSensorState === 'off' ? html`
           <span class="runout-warning" title="${localize.t('indicators.runout_detected')}">
             <ha-icon icon="mdi:alert"></ha-icon>
           </span>
@@ -42,7 +42,7 @@ export const headerTemplate = (entities, controls) => {
           <div class="progress-fill" style="width: ${entities.progress}%"></div>
         </div>
         <div class="layer-info">
-          ${localize.t('time.left')}: ${formatDuration(entities.remainingTime)}
+          ${localize.t('time.left')}: ${formatDuration(entities.remainingTime, entities.remainingTimeUnit)}
         </div>
       ` : ''}
     </div>

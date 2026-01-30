@@ -1,41 +1,105 @@
 /**
  * Format remaining time duration into human readable format
- * @param {number} minutes - Duration in minutes
+ * @param {number} value - Duration value
+ * @param {string} unit - Unit of measurement ('s', 'min', 'h', 'd', or undefined for minutes)
  * @param {object} options - Formatting options
  * @returns {string} Formatted duration string
  */
-export const formatDuration = (minutes, options = {}) => {
+export const formatDuration = (value, unit = 'min', options = {}) => {
   const {
     showComplete = true,
     completeText = 'Complete'
   } = options;
 
-  if (!minutes || minutes <= 0) {
+  if (!value || value <= 0) {
     return showComplete ? completeText : '0m';
   }
 
-  const hours = Math.floor(minutes / 60);
-  const mins = Math.floor(minutes % 60);
-
-  if (hours > 0) {
-    return `${hours}h ${mins}m`;
+  // Convert everything to seconds first
+  let totalSeconds;
+  switch (unit) {
+    case 's':
+    case 'sec':
+    case 'seconds':
+      totalSeconds = value;
+      break;
+    case 'min':
+    case 'minutes':
+      totalSeconds = value * 60;
+      break;
+    case 'h':
+    case 'hours':
+      totalSeconds = value * 3600;
+      break;
+    case 'd':
+    case 'days':
+      totalSeconds = value * 86400;
+      break;
+    default:
+      // Default to minutes for backward compatibility
+      totalSeconds = value * 60;
   }
-  return `${mins}m`;
+
+  // Calculate days, hours, minutes, seconds
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const mins = Math.floor((totalSeconds % 3600) / 60);
+  const secs = Math.floor(totalSeconds % 60);
+
+  // Build the formatted string
+  const parts = [];
+  if (days > 0) parts.push(`${days}d`);
+  if (hours > 0) parts.push(`${hours}h`);
+  if (mins > 0) parts.push(`${mins}m`);
+  if (secs > 0 && days === 0 && hours === 0) parts.push(`${secs}s`);
+
+  // If no parts, return 0m or complete
+  if (parts.length === 0) {
+    return showComplete ? completeText : '0m';
+  }
+
+  return parts.join(' ');
 };
 
 /**
- * Calculate and format the end time based on remaining minutes
- * @param {number} remainingMinutes - Remaining time in minutes
+ * Calculate and format the end time based on remaining time
+ * @param {number} remainingValue - Remaining time value
+ * @param {string} unit - Unit of measurement ('s', 'min', 'h', 'd', or undefined for minutes)
  * @param {object} hass - Home Assistant instance
  * @returns {string} Formatted end time
  */
-export const formatEndTime = (remainingMinutes, hass) => {
-  if (!remainingMinutes || remainingMinutes <= 0 || !hass) {
+export const formatEndTime = (remainingValue, unit = 'min', hass) => {
+  if (!remainingValue || remainingValue <= 0 || !hass) {
     return '---';
   }
 
+  // Convert to milliseconds based on unit
+  let remainingMs;
+  switch (unit) {
+    case 's':
+    case 'sec':
+    case 'seconds':
+      remainingMs = remainingValue * 1000;
+      break;
+    case 'min':
+    case 'minutes':
+      remainingMs = remainingValue * 60000;
+      break;
+    case 'h':
+    case 'hours':
+      remainingMs = remainingValue * 3600000;
+      break;
+    case 'd':
+    case 'days':
+      remainingMs = remainingValue * 86400000;
+      break;
+    default:
+      // Default to minutes for backward compatibility
+      remainingMs = remainingValue * 60000;
+  }
+
   try {
-    const endTime = new Date(Date.now() + (remainingMinutes * 60000));
+    const endTime = new Date(Date.now() + remainingMs);
     const timeFormat = {
       hour: hass.locale.hour_24 ? '2-digit' : 'numeric',
       minute: '2-digit',
