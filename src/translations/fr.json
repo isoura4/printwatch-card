@@ -28,8 +28,10 @@
         "time": {
           "complete": "Terminé",
           "left": "Restant",
+          "days": "j",
           "hours": "h",
-          "minutes": "min"
+          "minutes": "min",
+          "seconds": "s"
         },
         "print": {
           "layer": "Couche",

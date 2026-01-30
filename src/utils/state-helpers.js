@@ -135,6 +135,12 @@ export const getEntityStates = (hass, config) => {
     return isNaN(value) ? undefined : value;
   };
 
+  // Helper function to get unit of measurement from entity
+  const getUnitOfMeasurement = (entity) => {
+    if (!entity) return undefined;
+    return hass.states[entity]?.attributes?.unit_of_measurement;
+  };
+
   return {
     name: config.printer_name || 'Unnamed Printer',
     status: getState(config.print_status_entity, 'idle'),
@@ -144,6 +150,7 @@ export const getEntityStates = (hass, config) => {
     currentLayer: parseNumericValue(config.current_layer_entity) || 0,
     totalLayers: parseNumericValue(config.total_layers_entity) || 0,
     remainingTime: parseNumericValue(config.remaining_time_entity) || 0,
+    remainingTimeUnit: getUnitOfMeasurement(config.remaining_time_entity) || 'min',
     bedTemp: parseNumericValue(config.bed_temp_entity, parseFloat) || 0,
     nozzleTemp: parseNumericValue(config.nozzle_temp_entity, parseFloat) || 0,
     speedProfile: getState(config.speed_profile_entity, 'standard'),

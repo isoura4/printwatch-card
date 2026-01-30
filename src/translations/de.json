@@ -28,8 +28,10 @@
         "time": {
           "complete": "Fertig",
           "left": "Verbleibend",
+          "days": "T",
           "hours": "Std",
-          "minutes": "Min"
+          "minutes": "Min",
+          "seconds": "Sek"
         },
         "print": {
           "layer": "Schicht",

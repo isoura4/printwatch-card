@@ -42,7 +42,7 @@ export const headerTemplate = (entities, controls) => {
           <div class="progress-fill" style="width: ${entities.progress}%"></div>
         </div>
         <div class="layer-info">
-          ${localize.t('time.left')}: ${formatDuration(entities.remainingTime)}
+          ${localize.t('time.left')}: ${formatDuration(entities.remainingTime, entities.remainingTimeUnit)}
         </div>
       ` : ''}
     </div>
