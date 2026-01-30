@@ -148,6 +148,21 @@ export const cardStyles = css`
     overflow: hidden;
   }
 
+  .camera-feed ha-camera-stream {
+    width: 100%;
+    height: 100%;
+    display: block;
+    --video-max-height: none;
+  }
+
+  .camera-feed img,
+  .camera-feed video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
   .offline-message {
     width: 100%;
     aspect-ratio: 16 / 9;

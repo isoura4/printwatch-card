@@ -472,7 +472,6 @@ class PrintWatchCardEditor extends LitElement {
         <!-- General Settings -->
         ${this._renderSection('general', 'General', html`
           ${this._renderTextField('printer_name', 'Printer Name', 'My 3D Printer')}
-          ${this._renderNumberField('camera_refresh_rate', 'Camera Refresh Rate (ms)', 0, 30000, 100)}
         `)}
         
         <!-- Status Entities -->

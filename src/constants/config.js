@@ -52,8 +52,3 @@ export const DEFAULT_CONFIG = {
   // Camera rotation (0, 90, 180, 270 degrees)
   camera_rotation: 0
 };
-
-/**
- * Default camera update interval in milliseconds
- */
-export const DEFAULT_CAMERA_REFRESH_RATE = 1000;
