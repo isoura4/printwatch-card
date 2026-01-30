@@ -45,6 +45,8 @@ export const cardTemplate = (context) => {
     hasError: _cameraError,
     currentStage: entities.currentStage,
     entityPicture: hass.states[entities.camera_entity]?.attributes?.entity_picture,
+    cameraEntityId: entities.camera_entity,
+    hass,
     onError: context.handleImageError,
     onLoad: context.handleImageLoad,
     rotation: cameraRotation
