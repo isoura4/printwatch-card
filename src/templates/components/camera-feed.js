@@ -17,7 +17,9 @@ export const cameraFeedTemplate = ({ isOnline, hasError, currentStage, entityPic
   
   // Check if entity is a camera (for direct video streaming)
   const stateObj = cameraEntityId && hass ? hass.states[cameraEntityId] : null;
-  const isCamera = stateObj && cameraEntityId.startsWith('camera.');
+  const isCamera = stateObj && 
+                   stateObj.state !== 'unavailable' && 
+                   cameraEntityId.startsWith('camera.');
 
   // Use ha-camera-stream for direct video streaming when entity is a camera
   if (isCamera) {
