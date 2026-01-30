@@ -3,6 +3,7 @@
     "sensor": {
       "state": {
         "idle": "Idle",
+        "ready": "Ready",
         "printing": "Printing",
         "paused": "Paused",
         "pause": "Paused",
