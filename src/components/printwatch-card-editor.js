@@ -291,6 +291,13 @@ class PrintWatchCardEditor extends LitElement {
     this._fireConfigChanged(newConfig);
   }
 
+  _isDirectVideoCamera() {
+    // Check if the camera entity is a direct video camera (camera. domain)
+    // Returns true if the camera entity starts with 'camera.'
+    const cameraEntity = this._config?.camera_entity;
+    return cameraEntity && cameraEntity.startsWith('camera.');
+  }
+
   _renderEntityPicker(configKey, label, domain = null, optional = false) {
     // Support both single domain string and array of domains
     let entitySelector;
@@ -503,6 +510,7 @@ class PrintWatchCardEditor extends LitElement {
             { value: '180', label: '180°' },
             { value: '270', label: '270°' }
           ])}
+          ${!this._isDirectVideoCamera() ? this._renderNumberField('camera_refresh_rate', 'Camera Refresh Rate (ms)', 100, 10000, 100) : ''}
         `)}
 
         <!-- Control Button Entities -->

@@ -29,6 +29,7 @@ export const DEFAULT_CONFIG = {
   // Camera/Image entities
   camera_entity: '',
   cover_image_entity: '',
+  camera_refresh_rate: 1000,
   // Control button entities
   pause_button_entity: '',
   resume_button_entity: '',
